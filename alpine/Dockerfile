@@ -2,7 +2,7 @@ FROM alpine:edge
 MAINTAINER Guillaume Scheibel <guillaume.scheibel@gmail.com>
 
 RUN echo 'http://dl-4.alpinelinux.org/alpine/edge/main' > /etc/apk/repositories
-RUN apk add --update bash gcc g++ make openjdk7 ruby ruby-dev ruby-nokogiri asciidoctor curl python python-dev unzip findutils wget tar \
+RUN apk add --update bash gcc g++ make openjdk7 ruby ruby-dev ruby-nokogiri asciidoctor curl python python-dev unzip findutils wget tar ttf-dejavu \
     && rm -rf /var/cache/apk/*
 
 ENV JAVA_HOME /usr/lib/jvm/java-1.7-openjdk/
