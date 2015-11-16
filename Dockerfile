@@ -1,16 +1,20 @@
 FROM fedora
 MAINTAINER Guillaume Scheibel <guillaume.scheibel@gmail.com>
 
-RUN yum install -y tar make gcc ruby ruby-devel rubygems graphviz rubygem-nokogiri asciidoctor unzip findutils which wget python-devel zlib-devel
-RUN (curl -s -k -L -C - -b "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u20-b26/jdk-8u20-linux-x64.tar.gz | tar xfz -)
-ENV JAVA_HOME /jdk1.8.0_20
+RUN dnf install -y tar make gcc ruby ruby-devel rubygems graphviz rubygem-nokogiri unzip findutils which wget python-devel zlib-devel
+
+RUN (wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u66-b17/jdk-8u66-linux-x64.tar.gz"  | tar xfz -)
+# RUN (curl -s -k -L -C - -b "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u65-b17/jdk-8u65-linux-x64.tar.gz | tar xfz -)
+
+ENV JAVA_HOME /jdk1.8.0_65
 ENV PATH $PATH:$JAVA_HOME/bin:/fopub/bin
 ENV BACKENDS /asciidoctor-backends
 # Install fopub and run it once on a fake file to download the gradle wrapper
 RUN mkdir /fopub && curl -L https://api.github.com/repos/asciidoctor/asciidoctor-fopub/tarball | tar xzf - -C /fopub/ --strip-components=1 && \
     touch empty.xml && fopub empty.xml && rm empty.xml
 
-RUN gem install --no-ri --no-rdoc asciidoctor-diagram && \
+RUN gem install --no-ri --no-rdoc asciidoctor && \
+    gem install --no-ri --no-rdoc asciidoctor-diagram && \
     gem install --no-ri --no-rdoc asciidoctor-epub3 --version 1.0.0.alpha.2 && \
     gem install --no-ri --no-rdoc asciidoctor-pdf --version 1.5.0.alpha.7 && \
     gem install --no-ri --no-rdoc asciidoctor-confluence && \
